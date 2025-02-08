@@ -1,33 +1,71 @@
 import { useEffect, useState } from "react"
-import { api } from "../../../Api"
 import { QRCodeCanvas } from "qrcode.react";
 import io from 'socket.io-client'
-import axios from "axios";
+import '../../../CSS/pageQr.css'
+import { WhatsappApi } from "../../../Api";
 
 const server = io('http://localhost:50000')
 
-export const PageQR = () => {
-    const [qrCode,setQrCode] = useState('')
+const AuthTrue = ({phoneNumber,logOut}) => {
+    const logout = async() => {
+        await WhatsappApi.delete('/logout')
+        logOut(false)
+    }
 
+    return <>
+        <h2> вы уже привезали номер: {phoneNumber} </h2>
+        <button onClick={logout} className="logoutButton" >отвезать</button>
+    
+    
+    </>
+}
+
+
+
+const AuthFalse = ({qrCode}) => {
+    return <>
+        <h2 className="text-xl font-bold">Сканируйте QR-код</h2>
+
+        {qrCode !== '' ? <div className="QR" > <QRCodeCanvas value={qrCode} size={256} /></div> : <p>Ожидание QR-кода...</p> }
+    
+    
+    </>
+}
+
+export const PageQR = () => {
+    const userId = localStorage.getItem('userId')
+    const [isAuth,setIsAuth] = useState(false) 
+    const [qrCode,setQrCode] = useState('')
+    const [phoneNumber,setPhoneNumber] = useState('э, это тут не должно быть, это паходу ошибка, собщи разабу если не сложно :)')
+    
+    
+    server.on('authed',({isAuth,phoneNum})=> {
+        setIsAuth(isAuth)
+        setPhoneNumber(phoneNum)
+    })
 
     useEffect(()=> {
+        
         const getQr = async () => {
             server.on('qr', (qr) => {
                 setQrCode(qr)
-                console.log(qr)
             })
         }
-        axios.get('http://localhost:50000/test').then(getQr)
-
-
-     
-        
-    },[])
-
+        // server.on()
+        // console.log(userId)
+        WhatsappApi.post('/isAuth', { id: userId }).then(({data}) => {
+            if (data.isAuth) {
+                setIsAuth(true)
+                setPhoneNumber(data.phoneNumber)
+                return
+            }
+            getQr()
+        })
+    },[userId])
     return (<>
-        <div className="flex flex-col items-center gap-4">
-            <h2 className="text-xl font-bold">Сканируйте QR-код</h2>
-            {qrCode !== '' ? <QRCodeCanvas value={qrCode} size={256} /> : <p>Ожидание QR-кода...</p>}
+        <div className="QRblok">
+            {isAuth && <AuthTrue phoneNumber={phoneNumber}/>}
+            {!isAuth && <AuthFalse logOut={setIsAuth} qrCode={qrCode}  /> }
         </div>
     </>)
 }

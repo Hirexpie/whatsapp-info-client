@@ -32,12 +32,15 @@ export const Messages = () => {
     // const dispatch = useDispatch()
     
     
-    const pageButton = (pagePosi,isActive=false) => {
-        if (page+1 == pagePosi) {
+    const PageButton = ( {pagePosi,isActive=false}) => {
+        if (page+1 === pagePosi) {
             isActive = true
         }
+        if (pagePosi === 0 || countPages+1 === pagePosi) {
+            return<></>
+        }
         return <>
-            <button type="submit" onClick={() => {setPage(pagePosi-1)}} className={isActive ? "pageButton ActivePage" : "pageButton" }> {pagePosi} </button>
+            <button onClick={() => {setPage(pagePosi-1)}} className={isActive ? "pageButton ActivePage" : "pageButton" }> {pagePosi} </button>
         </>
     }
     console.log(page);
@@ -60,20 +63,13 @@ export const Messages = () => {
             )}
 
             
-
-            { countPages < 3 && <div className="pageButtons"> {pageButton(page+1)}{pageButton(page+2)} </div> }
-
-            { countPages < 4 && <div className="pageButtons"> {pageButton(page+1)}{pageButton(page+2)}{pageButton(page+3)} </div> }
-
-            { page === 0 && <div className="pageButtons" > {pageButton(page+1,true)} {pageButton(page+2)} {pageButton(page+3)} <p>.....</p> {pageButton(countPages)}  </div>}
-            { page === 1 && <div className="pageButtons" > {pageButton(page)} {pageButton(page+1,true)} {pageButton(page+2)} <p>.....</p> {pageButton(countPages)}  </div>}
-            { page === 2 && <div className="pageButtons" > {pageButton(page)} {pageButton(page+1,true)} {pageButton(page+2)} <p>.....</p> {pageButton(countPages)}  </div>}
-            { page > 2 && page < countPages-2 && <div className="pageButtons" >{pageButton(1)} <p>.....</p> {pageButton(page)} {pageButton(page+1,true)} {pageButton(page+2)} <p>.....</p> {pageButton(countPages)}  </div>}
-
-
-            { page === countPages-2 && <div className="pageButtons" > {pageButton(1)} <p>.....</p> {pageButton(page)} {pageButton(page+1,true)} {pageButton(page+2)}  </div>}
-            { page === countPages-1 && <div className="pageButtons" > {pageButton(1)} <p>.....</p> {pageButton(page-1)} {pageButton(page)} {pageButton(page+1,true)}  </div>}
-
+            <div className="pageButtons"> 
+                {page > 1 &&<> <PageButton pagePosi={1} /> <p>...</p> </>}
+                {Array.from({ length: 3 }, (_, index) => (
+                    <PageButton key={index} pagePosi={page+index} />
+                ))}
+                {page < countPages-2 && <> <p>...</p> <PageButton pagePosi={countPages} />  </>}
+            </div>
         </div>
     </>    
 }

@@ -7,11 +7,12 @@ import { MdQrCodeScanner } from "react-icons/md";
 import '../../CSS/nav.css'
 
 export const Nav = () => {
+    const userId = localStorage.getItem('userId') || ''
     return <>
         <nav>
-            <Link to='/:id/Messages' className='navButon'> <LuMessageCircleMore/> Собщение</Link>
-            <Link to='/:id/TeleBot' className='navButon'><FaTelegram/> telegram bot </Link>
-            <Link to='/:id/QR' className='navButon'><MdQrCodeScanner/> QR</Link>
+            <Link to={`/${userId}/Messages`} className='navButon'> <LuMessageCircleMore/> Собщение</Link>
+            <Link to={`/${userId}/TeleBot`} className='navButon'><FaTelegram/> telegram bot </Link>
+            <Link to={`/${userId}/QR`} className='navButon'><MdQrCodeScanner/> QR</Link>
 
 
         </nav>

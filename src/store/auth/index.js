@@ -5,14 +5,16 @@ const authSlice = createSlice({
   initialState: {
     token: localStorage.getItem('token') || null,
     expiresAt: localStorage.getItem("expiresAt") || null,
+    id: localStorage.getItem('userId') || null
   },
   reducers: {
-    setToken: (state, action) => {
-        state.token = action.payload.token;
-        state.expiresAt = action.payload.expiresAt;
-  
-        localStorage.setItem("token", action.payload.token);
-        localStorage.setItem("expiresAt",action.payload.expiresAt);
+    logIn: (state, action) => {
+      state.token = action.payload.token;
+      state.expiresAt = action.payload.expiresAt;
+      state.id = action.payload.userId;
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("expiresAt",action.payload.expiresAt);
+      localStorage.setItem("userId",action.payload.userId);
     },
     logout: (state) => {
         state.token = null;
@@ -23,5 +25,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setToken,logout } = authSlice.actions;
+export const { logIn,logout } = authSlice.actions;
 export default authSlice.reducer;

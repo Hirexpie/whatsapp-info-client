@@ -14,6 +14,8 @@ export const Main = () => {
                 { mode === 'Messages'  && <Messages/> }
                 { mode === 'QR' && <PageQR/> }
                 { mode === 'TeleBot' && <>test2</> }
+                {/* { mode === '' && <>not</> } */}
+
 
 
 

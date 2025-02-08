@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setToken } from "../store/auth";
+import { logIn } from "../store/auth";
 import { api } from "../Api/index";
 import "../CSS/login.css";
 
@@ -16,8 +16,7 @@ export const Login = () => {
                 login,
                 password,
             });
-            dispatch(setToken(data));
-            console.log(data.expiresAt)
+            dispatch(logIn(data));
         } catch (error) {
             console.error("Ошибка при входе:", error.response?.data || error.message);
             alert("Ошибка авторизации.");

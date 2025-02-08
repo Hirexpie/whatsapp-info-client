@@ -1,6 +1,6 @@
 import './App.css';
 import { Header } from './components/header'
-import { Routes,Route } from 'react-router-dom'
+import { Routes,Route,Link } from 'react-router-dom'
 import { Login } from './components/login';
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,8 +9,10 @@ import { Main } from './components/Main/Main';
 // import { Test } from './test/test'
 
 function App() {
+
+
   // const token = useSelector((state) => state.auth.token);
-  const {expiresAt,token} = useSelector((state) => state.auth);
+  const {expiresAt,token,id} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,10 +26,11 @@ function App() {
     <Header/>
 
     <Routes>
-      <Route path='/' element={<h1> hello </h1>} />
+      <Route path='/' element={<Link to={'/'+id+'/Messages'} > перейти </Link>} />
       <Route path='/login' element={<Login/>} />
       <Route path='/register' element={<h1> hello </h1>} />
       { token != null && <Route path='/:id/:mode' element={<Main/>} />}
+
 
       <Route path='/*' element={<h1> not faut </h1>} />
 
