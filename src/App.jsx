@@ -6,13 +6,15 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "./store/auth";
 import { Main } from './components/Main/Main';
+import { Registration } from './components/register';
+import { NotFound } from './components/Notfound';
 // import { Test } from './test/test'
 
 function App() {
 
 
   // const token = useSelector((state) => state.auth.token);
-  const {expiresAt,token,id} = useSelector((state) => state.auth);
+  const {expiresAt,id} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,12 +29,13 @@ function App() {
 
     <Routes>
       <Route path='/' element={<Link to={'/'+id+'/Messages'} > перейти </Link>} />
+
       <Route path='/login' element={<Login/>} />
-      <Route path='/register' element={<h1> hello </h1>} />
-      { token != null && <Route path='/:id/:mode' element={<Main/>} />}
+      <Route path='/register' element={<Registration/>} />
+      <Route path='/:id/:mode' element={<Main/>} />
 
 
-      <Route path='/*' element={<h1> not faut </h1>} />
+      <Route path='/*' element={<NotFound/>} />
 
       
     </Routes>

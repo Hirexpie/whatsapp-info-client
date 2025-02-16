@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logIn } from "../store/auth";
 import { api } from "../Api/index";
 import "../CSS/login.css";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
     const dispatch = useDispatch();
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
-    const state = useSelector(state => state.auth.token)
+    const navigate = useNavigate()
+    const {token,id} = useSelector(state => state.auth)
+    useEffect(() => {
+        if (token !== null) {
+          navigate(`/${id}/Massages`); 
+        }
+    }, [token,navigate,id]);
 
     const handleLogin = async () => {
         try {
@@ -17,6 +24,8 @@ export const Login = () => {
                 password,
             });
             dispatch(logIn(data));
+            window.location.reload();
+
         } catch (error) {
             console.error("Ошибка при входе:", error.response?.data || error.message);
             alert("Ошибка авторизации.");

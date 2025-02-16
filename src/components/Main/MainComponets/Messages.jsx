@@ -55,6 +55,19 @@ export const Messages = () => {
         }
         getMessages()
     },[page])
+
+    if (countPages <= 1) {
+        return <>
+            <div className="MessagesBlok" >
+                
+                {messages.map(e => 
+                    (<div key={e._id} >{Message(e)}</div>)
+                )}
+            </div>
+        </>    
+    }
+
+
     return <>
         <div className="MessagesBlok" >
             
